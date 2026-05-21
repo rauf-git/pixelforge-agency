@@ -120,50 +120,74 @@ To manage projects, navigate to **`http://localhost:3000/login`** and sign in wi
 
 ---
 
-## ☁️ Production Deployment (Render + Vercel)
+## ☁️ Production Deployment Options
 
-For a fast, resilient, and production-ready setup, we recommend deploying:
-1. **PocketBase (Database)** on **Render.com** (as a standalone containerized service with persistent storage).
-2. **Next.js (Frontend)** on **Vercel** (for blistering-fast global CDN delivery).
+You have two excellent choices for deploying your PixelForge Agency platform. Choose the one that best matches your budget and requirements:
 
 ---
 
-### Part 1: Deploying PocketBase on Render.com (Database)
+### 🌐 Option A: Unified Deployment on Render (Frontend + Backend)
 
-We have pre-configured this repository with a `render.yaml` Blueprint file and a custom lightweight PocketBase `Dockerfile`.
+Deploy **both** the Next.js frontend and the PocketBase backend together on Render using a single unified blueprint config (`render.yaml`).
 
-1. **Push Changes**: Make sure all your latest files (including the updated `Dockerfile` and `render.yaml`) are pushed to your GitHub repository.
-2. **Open Render**: Go to the [Render Dashboard](https://dashboard.render.com/) and log in.
-3. **Deploy using Blueprint**:
-   * Click the **New +** button in the top-right and select **Blueprint**.
-   * Select your **`pixelforge-agency`** repository.
-   * Render will parse the `render.yaml` file automatically. Give your service group a name (e.g., `pixelforge-db-group`) and click **Apply**.
-4. **Access the Database**:
-   * Once `pixelforge-db` finishes deploying, open its public Admin UI in your browser (e.g., `https://pixelforge-db.onrender.com/_/`).
-   * Create your admin account (e.g., `abdulrawoof9457@gmail.com` with a strong password).
-5. **Initialize Database Tables**:
-   * Run the database configuration script locally, pointing it to your live Render instance to build all collections and API rules automatically:
+#### Step-by-Step Instructions:
+
+1. **Commit and Push**: Ensure all your local changes (especially `render.yaml` and `Dockerfile`) are committed and pushed to your GitHub repository:
+   ```bash
+   git add .
+   git commit -m "feat: configure unified render deployment"
+   git push origin master
+   ```
+2. **Open Render**: Go to your [Render Dashboard](https://dashboard.render.com/).
+3. **Select Blueprints**:
+   * Click **New +** in the top-right and select **Blueprint**.
+   * Connect and select your **`pixelforge-agency`** repository.
+4. **Apply Blueprint**:
+   * Render will automatically discover and parse the `render.yaml` file.
+   * Provide a Group Name (e.g., `pixelforge-agency-group`).
+   * Click **Apply**.
+   * Render will automatically spin up two services:
+     1. `pixelforge-db` (PocketBase backend - containerized via Dockerfile)
+     2. `pixelforge-web` (Next.js frontend - Node.js environment)
+   * **Automatic URL Binding**: Render will dynamically resolve the backend's URL and automatically inject it into the frontend's `NEXT_PUBLIC_POCKETBASE_URL` environment variable at build-time! No manual configuration needed.
+5. **Access and Initialize**:
+   * Once the services are active, access your PocketBase Admin dashboard at `https://<your-db-subdomain>.onrender.com/_/` and create your admin account.
+   * Initialize your live database collections from your local command line by executing:
      ```powershell
-     $env:NEXT_PUBLIC_POCKETBASE_URL="https://pixelforge-db.onrender.com"
+     $env:NEXT_PUBLIC_POCKETBASE_URL="https://<your-db-subdomain>.onrender.com"
      npm run setup-db
      ```
-     *(On Mac/Linux: `NEXT_PUBLIC_POCKETBASE_URL=https://pixelforge-db.onrender.com npm run setup-db`)*
+     *(On macOS/Linux: `NEXT_PUBLIC_POCKETBASE_URL=https://<your-db-subdomain>.onrender.com npm run setup-db`)*
 
-> [!WARNING]
-> **Data Persistence**: Render's Free instance type does not support persistent disks. To keep your SQLite database files permanently across container spins/restarts, upgrade the PocketBase service (`pixelforge-db`) to a paid tier (such as the $7/month Starter plan) in the Render dashboard. Under the Free tier, database changes will reset whenever the service goes idle or restarts.
+> [!NOTE]
+> **Free Tier Volume Warning**: Render's **Free** web service tier does not support persistent disks. To ensure your SQLite database files (`pb_data`) are preserved permanently across container sleeps/restarts, change the PocketBase plan in `render.yaml` from `free` to `starter` (which includes persistent disk support for only $7/month), or manually attach a disk in the Render UI to a paid service tier.
 
 ---
 
-### Part 2: Deploying Next.js on Vercel (Frontend)
+### ⚡ Option B: Hybrid Deployment (PocketBase on Render + Next.js on Vercel)
 
-1. **Open Vercel**: Log in to your [Vercel Dashboard](https://vercel.com).
-2. **Import Project**: Click **Add New** > **Project** and select your **`pixelforge-agency`** repository.
-3. **Configure Environment Variables**:
-   * Expand the **Environment Variables** section.
-   * Add a new variable:
-     * **Key**: `NEXT_PUBLIC_POCKETBASE_URL`
-     * **Value**: `https://pixelforge-db.onrender.com` *(use your actual public Render PocketBase URL!)*
-4. **Deploy**: Click **Deploy**! Vercel will build the frontend and deploy it globally.
+For the absolute fastest page load speeds and global edge delivery, deploy the **Next.js frontend on Vercel** (100% free) and the **PocketBase database on Render**.
+
+#### Step 1: Deploy PocketBase on Render
+1. Go to the [Render Dashboard](https://dashboard.render.com/).
+2. Click **New +** > **Blueprint** and import your repository.
+3. Keep or apply only the `pixelforge-db` service (you can cancel or delete the `pixelforge-web` service on Render if you are deploying the frontend on Vercel instead).
+4. Once deployed, note down your backend's public URL (e.g. `https://pixelforge-db.onrender.com`).
+
+#### Step 2: Deploy Next.js on Vercel
+1. Go to the [Vercel Dashboard](https://vercel.com).
+2. Click **Add New** > **Project** and import your `pixelforge-agency` repository.
+3. Under **Environment Variables**, add:
+   * **Key**: `NEXT_PUBLIC_POCKETBASE_URL`
+   * **Value**: `https://pixelforge-db.onrender.com` *(use your live Render PocketBase URL)*
+4. Click **Deploy**. Vercel will build and distribute your static and dynamic routes globally.
+
+#### Step 3: Initialize Live Collections
+Run the local configuration script to sync your live collections:
+```powershell
+$env:NEXT_PUBLIC_POCKETBASE_URL="https://pixelforge-db.onrender.com"
+npm run setup-db
+```
 
 ---
 

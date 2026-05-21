@@ -120,5 +120,41 @@ To manage projects, navigate to **`http://localhost:3000/login`** and sign in wi
 
 ---
 
+## ☁️ Deploying to Render.com (Render Blueprint)
+
+We have pre-configured this repository with a `render.yaml` blueprint specification and a custom PocketBase `Dockerfile`. This enables you to deploy both Next.js and your PocketBase SQLite database together on Render.com in just a few clicks!
+
+### Step-by-Step Deployment Guide:
+
+1. **Push Changes to GitHub**: Make sure you have pushed all your latest code (including the new `Dockerfile` and `render.yaml`) to your GitHub repository.
+2. **Open Render**: Go to the [Render Dashboard](https://dashboard.render.com/) and log in.
+3. **Deploy using Blueprint**:
+   * Click the **New +** button in the top-right corner.
+   * Select **Blueprint** from the dropdown menu.
+   * Connect your GitHub account and select your **`pixelforge-agency`** repository.
+4. **Approve Blueprint Settings**:
+   * Render will automatically parse the `render.yaml` file.
+   * Give your blueprint group a name (e.g., `pixelforge-group`).
+   * Click **Apply**.
+5. **How It Works**:
+   * Render will automatically spin up two services in tandem:
+     1. **`pixelforge-db`**: Containerizes your PocketBase server, exposes it on port `8080`, and attaches a persistent disk (if on a paid tier) so data survives restarts.
+     2. **`pixelforge-web`**: Reads the database's public URL dynamically via Render's cross-service mapping, builds your Next.js frontend, and deploys it.
+6. **Access and Setup**:
+   * Once `pixelforge-db` finishes deploying, open its public Admin URL (e.g. `https://pixelforge-db.onrender.com/_/`) in your browser.
+   * Create your first superuser account (e.g. `abdulrawoof9457@gmail.com` with a strong password).
+   * Configure the tables automatically. Run our configuration script locally, pointing to your live production database:
+     ```bash
+     $env:NEXT_PUBLIC_POCKETBASE_URL="https://pixelforge-db.onrender.com"
+     npm run setup-db
+     ```
+     *(For Mac/Linux, use: `NEXT_PUBLIC_POCKETBASE_URL=https://pixelforge-db.onrender.com npm run setup-db`)*
+   * Open your Next.js site URL, and enjoy your fully dynamic, real-time agency platform live in production!
+
+> [!WARNING]
+> **Persistent Disk Notice**: Render's Free instance type does not support persistent disks. To keep your SQLite database files permanently across container spins/restarts, upgrade the PocketBase service (`pixelforge-db`) to a paid tier (such as the $7/month Starter plan) in the Render dashboard. If you use the Free tier, database changes will reset whenever the service goes idle or restarts.
+
+---
+
 ## 📝 License
 This project is licensed under the MIT License. Developed for PixelForge Agency.

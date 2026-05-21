@@ -1,0 +1,36 @@
+# Render Blueprint Specification for PixelForge Agency
+services:
+  # 1. PocketBase Database & Admin Service
+  - type: web
+    name: pixelforge-db
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free # Can be upgraded to 'starter' for persistent disk support
+    healthCheckPath: /api/health
+    # Expose port 8080 (standard for Render Docker)
+    envVars:
+      - key: PORT
+        value: 8080
+    # Persistent Disk configuration to prevent data loss on server restarts.
+    # Note: Render Free Tier Web Services do not support disks. Upgrade to a paid plan, 
+    # or omit the disk section if you only want to test transient data.
+    disk:
+      name: pb-data
+      mountPath: /pb/pb_data
+      sizeGB: 1
+
+  # 2. Next.js Website Frontend Service
+  - type: web
+    name: pixelforge-web
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      # Automatically bind the public URL of the database service 
+      # directly to our client-side Next.js environment variable!
+      - key: NEXT_PUBLIC_POCKETBASE_URL
+        fromService:
+          type: web
+          name: pixelforge-db
+          property: url

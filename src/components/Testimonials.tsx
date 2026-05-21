@@ -81,7 +81,7 @@ export default function Testimonials() {
           {activeTestimonials.map((rev) => {
             const hasAvatar = rev.clientAvatar && rev.clientAvatar !== "";
             const avatarUrl = hasAvatar 
-              ? pb.files.getUrl(rev, rev.clientAvatar, { thumb: '80x80' }) 
+              ? pb.files.getUrl(rev, rev.clientAvatar!, { thumb: '80x80' }) 
               : null;
 
             return (

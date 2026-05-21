@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # 1. PocketBase Database & Storage Service
+  pocketbase:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pixelforge-db
+    ports:
+      - "8080:8080"
+    volumes:
+      - pb_data:/pb/pb_data
+    restart: always
+    environment:
+      - PORT=8080
+
+  # 2. Next.js Agency Frontend Website
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.next
+      args:
+        # Note: Replace <YOUR_VM_PUBLIC_IP_OR_DOMAIN> with your actual Oracle VM public IP 
+        # or domain name when deploying. PocketBase must be accessible from the user's browser.
+        - NEXT_PUBLIC_POCKETBASE_URL=http://<YOUR_VM_PUBLIC_IP_OR_DOMAIN>:8080
+    container_name: pixelforge-web
+    ports:
+      - "3000:3000"
+    restart: always
+    depends_on:
+      - pocketbase
+
+volumes:
+  # This creates a persistent volume on your Oracle host's NVMe SSD
+  # to store your SQLite database and uploaded files permanently.
+  pb_data:

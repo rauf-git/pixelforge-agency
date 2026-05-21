@@ -64,9 +64,10 @@ export default function AddProjectPage() {
         router.push('/admin');
         router.refresh();
       }, 1500);
-    } catch (err: any) {
+    } catch (err) {
       console.error('Error adding project:', err);
-      setError(err.message || 'Failed to create project. Please verify your fields.');
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      setError(errorMessage || 'Failed to create project. Please verify your fields.');
     } finally {
       setLoading(false);
     }

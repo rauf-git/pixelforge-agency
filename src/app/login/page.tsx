@@ -32,7 +32,7 @@ export default function LoginPage() {
       let authData;
       try {
         authData = await pb.collection('_superusers').authWithPassword(email, password);
-      } catch (err) {
+      } catch {
         // Fallback for PocketBase v0.22 and below
         authData = await pb.admins.authWithPassword(email, password);
       }
@@ -43,7 +43,7 @@ export default function LoginPage() {
       } else {
         throw new Error('Authentication failed');
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error('Login error:', err);
       setError('Invalid admin email or password. Please try again.');
     } finally {

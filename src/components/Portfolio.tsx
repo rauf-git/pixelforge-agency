@@ -57,8 +57,14 @@ export default function Portfolio() {
         });
         setProjects(records);
         setErrorMsg('');
-      } catch (error: any) {
-        console.error('Error fetching projects from PocketBase:', error);
+      } catch (err: unknown) {
+        console.error('Error fetching projects from PocketBase:', err);
+        const error = err as { 
+          status?: number; 
+          data?: Record<string, unknown>; 
+          originalError?: { message?: string }; 
+          message?: string 
+        };
         const status = error.status ? `[HTTP ${error.status}] ` : '';
         let details = '';
         if (error.data && typeof error.data === 'object' && Object.keys(error.data).length > 0) {
@@ -77,7 +83,7 @@ export default function Portfolio() {
     fetchProjects();
 
     // Subscribe to real-time project changes (create, update, delete)
-    pb.collection('projects').subscribe('*', (e) => {
+    pb.collection('projects').subscribe('*', () => {
       fetchProjects();
     }).catch((err) => {
       console.error('Real-time project subscription error:', err);

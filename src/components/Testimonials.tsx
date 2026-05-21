@@ -50,7 +50,7 @@ export default function Testimonials() {
     fetchTestimonials();
 
     // Subscribe to real-time testimonial changes
-    pb.collection('testimonials').subscribe('*', (e) => {
+    pb.collection('testimonials').subscribe('*', () => {
       fetchTestimonials();
     }).catch((err) => {
       console.error('Real-time testimonial subscription error:', err);

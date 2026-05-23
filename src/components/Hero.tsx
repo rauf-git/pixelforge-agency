@@ -1,6 +1,7 @@
 'use client';
 
 import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Hero() {
   return (
@@ -34,19 +35,19 @@ export default function Hero() {
 
         {/* Modern Call to Actions */}
         <div className="mt-6 flex flex-col sm:flex-row gap-4 items-center justify-center">
-          <a
+          <Link
             href="/contact"
             className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-primary hover:bg-primary/95 text-primary-foreground font-semibold text-xs tracking-wider uppercase transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-primary/10"
           >
             Start Project
             <ArrowRight className="w-3.5 h-3.5 transition-transform duration-350 group-hover:translate-x-1" />
-          </a>
-          <a
+          </Link>
+          <Link
             href="/portfolio"
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-border bg-card/40 hover:bg-muted text-foreground font-semibold text-xs tracking-wider uppercase transition-all duration-300 hover:border-border"
           >
             Our Work
-          </a>
+          </Link>
         </div>
       </div>
 

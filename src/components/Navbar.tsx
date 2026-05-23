@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Sun, Moon, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Navbar() {
   const [darkMode, setDarkMode] = useState(false);
@@ -37,7 +38,7 @@ export default function Navbar() {
       <header className="w-full fixed top-6 left-0 right-0 z-50 px-4 flex justify-center pointer-events-none">
         <nav className="w-full max-w-4xl bg-card/60 dark:bg-card/40 backdrop-blur-md border border-border/80 rounded-full py-3.5 px-6 flex justify-between items-center shadow-lg pointer-events-auto transition-transform duration-500 hover:scale-[1.01]">
           {/* Logo & Brand */}
-          <a href="/" className="flex items-center gap-2.5 group">
+          <Link href="/" className="flex items-center gap-2.5 group">
             {/* Inline SVG Woven Hashtag Symbol */}
             <div className="w-8 h-8 relative flex items-center justify-center transition-transform duration-500 group-hover:rotate-12">
               <svg viewBox="0 0 100 100" className="w-full h-full text-primary fill-current">
@@ -57,19 +58,19 @@ export default function Navbar() {
             <span className="font-sans font-black text-lg tracking-tighter text-foreground group-hover:text-primary transition-colors">
               upscalemark<span className="text-primary">.</span>
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center gap-6">
             {['services', 'portfolio', 'about', 'contact'].map((item) => (
-              <a
+              <Link
                 key={item}
                 href={`/${item}`}
                 className="font-mono text-3xs font-black tracking-widest uppercase text-muted-foreground hover:text-primary transition-colors duration-300 relative group/nav cursor-pointer py-1"
               >
                 /{item}
                 <span className="absolute bottom-0 left-0 w-full h-[1px] bg-primary scale-x-0 group-hover/nav:scale-x-100 transition-transform duration-300 origin-left"></span>
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -121,7 +122,7 @@ export default function Navbar() {
           <ul className="flex flex-col gap-8">
             {['services', 'portfolio', 'about', 'contact'].map((item, index) => (
               <li key={item} className="overflow-hidden">
-                <a
+                <Link
                   href={`/${item}`}
                   onClick={() => setMenuOpen(false)}
                   className={`block text-4xl md:text-6xl font-black tracking-tighter text-foreground hover:text-primary lowercase transition-all duration-500 ease-out transform ${
@@ -131,7 +132,7 @@ export default function Navbar() {
                 >
                   <span className="text-primary/40 font-mono mr-4 select-none">{"//"}</span>
                   {item}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -151,14 +152,14 @@ export default function Navbar() {
               </a>
             </div>
 
-            <a
+            <Link
               href="/contact"
               onClick={() => setMenuOpen(false)}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs tracking-wider uppercase transition-all shadow-md hover:shadow-lg"
             >
               Start Project
               <ArrowRight className="w-3.5 h-3.5" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

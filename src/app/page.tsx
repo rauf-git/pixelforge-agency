@@ -5,18 +5,22 @@ import Portfolio from "@/components/Portfolio";
 import About from "@/components/About";
 import Testimonials from "@/components/Testimonials";
 import ContactForm from "@/components/ContactForm";
+import LoadingScreen from "@/components/LoadingScreen";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans selection:bg-violet-600/30 selection:text-violet-200">
-      {/* Premium header with navigation */}
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans relative">
+      {/* Sleek initial entry loader */}
+      <LoadingScreen />
+
+      {/* Premium header with navigation and bright/dark mode toggle */}
       <Navbar />
 
       <main className="flex-grow flex flex-col">
         {/* Dynamic introduction section */}
         <Hero />
 
-        {/* Capabilities listing */}
+        {/* Capabilities listing with self-explanatory vector SVGs */}
         <Services />
 
         {/* Interactive work grid with state filters */}
@@ -28,13 +32,13 @@ export default function Home() {
         {/* Client reviews slider panel */}
         <Testimonials />
 
-        {/* Database integrated inquiry form */}
+        {/* Stepped project interactive inquiry form */}
         <ContactForm />
       </main>
 
-      {/* Tiny clean footer */}
-      <footer className="w-full py-8 border-t border-zinc-900 bg-zinc-950 text-center text-xs text-zinc-500">
-        <p>&copy; {new Date().getFullYear()} PixelForge Agency. All rights reserved.</p>
+      {/* Clean minimal footer */}
+      <footer className="w-full py-8 border-t border-border bg-background/50 text-center text-3xs font-mono tracking-widest text-muted-foreground/60">
+        <p>&copy; {new Date().getFullYear()} upscalemark. All rights reserved.</p>
       </footer>
     </div>
   );

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { pb } from '@/lib/pocketbase';
 import { Project } from '@/types';
+import { ArrowUpRight } from 'lucide-react';
 
 const FALLBACK_PROJECTS: Project[] = [
   {
@@ -11,10 +12,10 @@ const FALLBACK_PROJECTS: Project[] = [
     collectionName: 'projects',
     created: '',
     updated: '',
-    title: "Quantum E-Commerce",
+    title: "Quantum E-Commerce System",
     category: "Web",
     tags: "Next.js, Tailwind, PocketBase",
-    description: "A secure, blistering-fast digital store with real-time inventory management.",
+    description: "A secure, blistering-fast digital store built with headless headless architecture.",
     thumbnail: ""
   },
   {
@@ -23,10 +24,10 @@ const FALLBACK_PROJECTS: Project[] = [
     collectionName: 'projects',
     created: '',
     updated: '',
-    title: "Pulse Wellness App",
-    category: "Design",
-    tags: "Figma, UI/UX, Prototyping",
-    description: "A beautiful, patient-centric mobile interface helping thousands track wellness habits.",
+    title: "Vibe Social Campaign",
+    category: "Branding",
+    tags: "Paid Ads, Social Strategy",
+    description: "High-conversion product launch campaign leveraging influencer marketing and custom ads.",
     thumbnail: ""
   },
   {
@@ -35,10 +36,10 @@ const FALLBACK_PROJECTS: Project[] = [
     collectionName: 'projects',
     created: '',
     updated: '',
-    title: "Vortex Brand Identity",
-    category: "Branding",
-    tags: "Identity, Brand Guidelines",
-    description: "A comprehensive design language, guideline package, and brand asset launch.",
+    title: "Vortex SaaS UI Audit",
+    category: "Design",
+    tags: "UI/UX, Product Advisory",
+    description: "Comprehensive product advisory audit reorganizing layout architectures for scale.",
     thumbnail: ""
   }
 ];
@@ -74,7 +75,7 @@ export default function Portfolio() {
         } else {
           details = error.message || String(error);
         }
-        setErrorMsg(`${status}Connection failed: ${details}`);
+        setErrorMsg(`${status}Connection notice: ${details || 'Using mockup projects fallback.'}`);
       } finally {
         setLoading(false);
       }
@@ -82,7 +83,6 @@ export default function Portfolio() {
     
     fetchProjects();
 
-    // Subscribe to real-time project changes (create, update, delete)
     pb.collection('projects').subscribe('*', () => {
       fetchProjects();
     }).catch((err) => {
@@ -98,44 +98,52 @@ export default function Portfolio() {
 
   const activeProjects = projects.length > 0 ? projects : FALLBACK_PROJECTS;
 
+  // Smart mapping: Web -> Web Dev, Design/Branding -> Marketing
   const filteredProjects = filter === 'All' 
     ? activeProjects 
-    : activeProjects.filter(p => p.category.toLowerCase() === filter.toLowerCase());
+    : activeProjects.filter(p => {
+        if (filter.toLowerCase() === 'web dev') {
+          return p.category.toLowerCase() === 'web';
+        }
+        return p.category.toLowerCase() === 'design' || p.category.toLowerCase() === 'branding';
+      });
 
   return (
-    <section id="portfolio" className="py-20 max-w-7xl mx-auto px-4">
-      <div className="text-center max-w-2xl mx-auto mb-12">
-        <h2 className="text-3xl md:text-4xl font-bold text-white">Featured Portfolio</h2>
-        <p className="mt-4 text-zinc-400">Discover our latest projects built with cutting-edge technologies.</p>
-      </div>
-
-      <div className="flex justify-center gap-4 mb-12">
-        {['All', 'Web', 'Design', 'Branding'].map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setFilter(cat)}
-            className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all border ${
-              filter === cat 
-                ? 'bg-violet-600 border-violet-600 text-white' 
-                : 'border-zinc-800 hover:border-zinc-700 text-zinc-400 hover:text-white'
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-
-      {errorMsg && (
-        <div className="max-w-md mx-auto mb-8 p-4 rounded-xl border border-amber-900/30 bg-amber-950/15 text-center text-xs text-amber-300">
-          <p className="font-semibold">⚠️ Database Connection Notice</p>
-          <p className="mt-1 text-zinc-400 font-mono text-3xs">{errorMsg}</p>
-          <p className="mt-2 text-zinc-500 text-3xs">The website is currently showing mockup design projects as a fallback.</p>
+    <section id="portfolio" className="py-24 px-6 max-w-6xl mx-auto border-t border-border">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+        <div className="text-left max-w-xl">
+          <span className="font-mono text-3xs font-black tracking-widest text-primary uppercase">
+            {"// Gallery"}
+          </span>
+          <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-foreground lowercase mt-3">
+            featured work
+          </h2>
+          <p className="mt-4 text-muted-foreground text-sm leading-relaxed">
+            Discover a curated collection of platforms and campaigns designed for performance and scale.
+          </p>
         </div>
-      )}
+
+        {/* Minimalist Tab Filters */}
+        <div className="flex flex-wrap gap-2.5">
+          {['All', 'Web Dev', 'Marketing'].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setFilter(cat)}
+              className={`px-4 py-2 rounded-full text-xs font-bold font-mono tracking-tighter transition-all cursor-pointer border ${
+                filter === cat 
+                  ? 'bg-primary border-primary text-primary-foreground shadow-sm' 
+                  : 'border-border bg-card/40 hover:bg-muted text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              /{cat.toLowerCase()}
+            </button>
+          ))}
+        </div>
+      </div>
 
       {loading ? (
         <div className="flex justify-center items-center py-20">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-500"></div>
+          <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -146,49 +154,74 @@ export default function Portfolio() {
               : null;
 
             return (
-              <div key={project.id} className="group rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-950 hover:border-zinc-700 transition-all flex flex-col">
-                <div className="relative h-48 bg-zinc-900 w-full overflow-hidden flex items-center justify-center">
-                  {imageUrl ? (
-                    <img 
-                      src={imageUrl} 
-                      alt={project.title} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-violet-950/20 to-zinc-900 flex items-center justify-center text-zinc-650 group-hover:scale-105 transition-transform duration-300">
-                      <span className="text-2xs font-semibold text-violet-400/60 uppercase tracking-widest">
-                        {project.title} Mockup
-                      </span>
-                    </div>
-                  )}
-                </div>
-                <div className="p-6 flex flex-col gap-2 flex-grow justify-between">
-                  <div>
-                    <span className="text-xs font-semibold text-violet-400 tracking-wider uppercase">
-                      {project.category}
+              <div
+                key={project.id}
+                className="group flex flex-col justify-between rounded-2xl overflow-hidden border border-border bg-card hover:border-primary/20 transition-all duration-300 shadow-sm hover:shadow-md"
+              >
+                <div>
+                  {/* Thumbnail Image Container */}
+                  <div className="relative aspect-[16/10] bg-muted overflow-hidden">
+                    {imageUrl ? (
+                      <img 
+                        src={imageUrl} 
+                        alt={project.title} 
+                        className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-muted flex items-center justify-center text-muted-foreground/30">
+                        {/* Styled mini SVG pattern */}
+                        <svg viewBox="0 0 100 100" className="w-16 h-16 stroke-current fill-none stroke-[1] opacity-25">
+                          <rect x="20" y="20" width="60" height="60" rx="4" />
+                          <line x1="20" y1="50" x2="80" y2="50" />
+                          <circle cx="50" cy="50" r="10" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="p-6">
+                    <span className="font-mono text-3xs font-bold text-primary tracking-widest uppercase">
+                      /{project.category.toLowerCase()}
                     </span>
-                    <h3 className="text-lg font-bold text-white mt-1">{project.title}</h3>
-                    <p className="text-xs text-zinc-400 mt-2 line-clamp-2 leading-relaxed">
+                    <h3 className="text-lg font-extrabold text-foreground tracking-tight mt-1">
+                      {project.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground mt-2 line-clamp-2 leading-relaxed">
                       {project.description}
                     </p>
                   </div>
-                  <div className="mt-4 pt-4 border-t border-zinc-900 flex items-center justify-between">
-                    <span className="text-3xs font-mono text-zinc-500">{project.tags}</span>
-                    {project.liveUrl && (
-                      <a 
-                        href={project.liveUrl} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="text-xs font-medium text-violet-400 hover:text-violet-300 transition-colors"
-                      >
-                        View Live &rarr;
-                      </a>
-                    )}
-                  </div>
+                </div>
+
+                <div className="px-6 pb-6 pt-4 border-t border-border/60 flex items-center justify-between">
+                  <span className="font-mono text-3xs text-muted-foreground/50">
+                    {project.tags}
+                  </span>
+                  {project.liveUrl ? (
+                    <a 
+                      href={project.liveUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="inline-flex items-center gap-1 text-xs font-bold text-primary hover:text-primary/80 transition-colors"
+                    >
+                      launch
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </a>
+                  ) : (
+                    <span className="font-mono text-3xs text-muted-foreground/30 select-none">
+                      mockup
+                    </span>
+                  )}
                 </div>
               </div>
             );
           })}
+        </div>
+      )}
+
+      {errorMsg && (
+        <div className="max-w-md mx-auto mt-12 p-4 rounded-xl border border-amber-900/10 dark:border-amber-950/20 bg-amber-950/5 text-center text-3xs text-amber-600 dark:text-amber-300">
+          <p className="font-semibold">⚠️ Database Connection Note</p>
+          <p className="mt-1 font-mono text-4xs leading-relaxed opacity-80">{errorMsg}</p>
         </div>
       )}
     </section>

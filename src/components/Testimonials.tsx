@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { pb } from '@/lib/pocketbase';
 import { Testimonial } from '@/types';
+import { Star } from 'lucide-react';
 
 const FALLBACK_TESTIMONIALS: Testimonial[] = [
   {
@@ -12,8 +13,8 @@ const FALLBACK_TESTIMONIALS: Testimonial[] = [
     created: '',
     updated: '',
     clientName: "Sarah Jenkins",
-    roleCompany: "Product Manager, TechCorp",
-    reviewText: "PixelForge delivered a beautiful, blisteringly fast platform that exceeded our expectations.",
+    roleCompany: "Marketing Lead, TechCorp",
+    reviewText: "upscalemark delivered an incredibly clean platform that increased our search campaign conversions by over 40%.",
     rating: 5
   },
   {
@@ -23,8 +24,8 @@ const FALLBACK_TESTIMONIALS: Testimonial[] = [
     created: '',
     updated: '',
     clientName: "Marcus Vance",
-    roleCompany: "Founder, Vortex Ventures",
-    reviewText: "Working with them was seamless. Their attention to detail and UI execution is masterclass.",
+    roleCompany: "Founder, Vortex",
+    reviewText: "Their layout precision and architectural clarity is masterclass. Best front-end execution we have hired.",
     rating: 5
   }
 ];
@@ -49,7 +50,6 @@ export default function Testimonials() {
 
     fetchTestimonials();
 
-    // Subscribe to real-time testimonial changes
     pb.collection('testimonials').subscribe('*', () => {
       fetchTestimonials();
     }).catch((err) => {
@@ -66,15 +66,22 @@ export default function Testimonials() {
   const activeTestimonials = testimonials.length > 0 ? testimonials : FALLBACK_TESTIMONIALS;
 
   return (
-    <section className="py-20 max-w-7xl mx-auto px-4 border-t border-zinc-900 bg-zinc-950/40">
-      <div className="text-center max-w-2xl mx-auto mb-16">
-        <h2 className="text-3xl md:text-4xl font-bold text-white">Client Testimonials</h2>
-        <p className="mt-4 text-zinc-400">Read what industry leaders say about working with us.</p>
+    <section className="py-24 px-6 max-w-6xl mx-auto border-t border-border bg-card/10">
+      <div className="text-left mb-16 max-w-xl">
+        <span className="font-mono text-3xs font-black tracking-widest text-primary uppercase">
+          {"// Reviews"}
+        </span>
+        <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-foreground lowercase mt-3">
+          client reviews
+        </h2>
+        <p className="mt-4 text-muted-foreground text-sm leading-relaxed">
+          Read strategic feedback from product teams and companies who have scaled their systems with us.
+        </p>
       </div>
 
       {loading ? (
         <div className="flex justify-center items-center py-10">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-500"></div>
+          <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -85,33 +92,41 @@ export default function Testimonials() {
               : null;
 
             return (
-              <div key={rev.id} className="p-8 rounded-2xl border border-zinc-800 bg-zinc-950 flex flex-col gap-4 justify-between">
-                <div>
-                  {/* Render dynamic rating stars */}
-                  <div className="flex gap-1 mb-4 text-violet-400">
+              <div 
+                key={rev.id} 
+                className="p-8 sm:p-10 rounded-[2rem] border border-border bg-card flex flex-col justify-between gap-8 transition-all duration-300 hover:border-primary/20 shadow-sm hover:shadow-md"
+              >
+                <div className="flex flex-col gap-4">
+                  {/* Modern custom star vectors */}
+                  <div className="flex gap-0.5 text-primary">
                     {Array.from({ length: rev.rating }).map((_, i) => (
-                      <span key={i} className="text-sm">★</span>
+                      <Star key={i} className="w-4 h-4 fill-current stroke-none" />
                     ))}
                   </div>
-                  <p className="text-zinc-300 text-sm leading-relaxed italic">
+                  <p className="text-foreground/90 text-sm leading-relaxed font-medium italic">
                     &ldquo;{rev.reviewText}&rdquo;
                   </p>
                 </div>
-                <div className="flex items-center gap-3 mt-4">
+
+                <div className="flex items-center gap-4 border-t border-border/60 pt-6">
                   {avatarUrl ? (
                     <img 
                       src={avatarUrl} 
                       alt={rev.clientName} 
-                      className="w-10 h-10 rounded-full object-cover border border-zinc-850"
+                      className="w-10 h-10 rounded-full object-cover border border-border"
                     />
                   ) : (
-                    <div className="w-10 h-10 rounded-full bg-violet-950/40 border border-violet-800/40 flex items-center justify-center text-xs font-bold text-violet-400">
+                    <div className="w-10 h-10 rounded-full bg-primary/5 border border-primary/20 flex items-center justify-center text-xs font-bold text-primary font-mono uppercase">
                       {rev.clientName.charAt(0)}
                     </div>
                   )}
                   <div className="flex flex-col">
-                    <span className="text-sm font-semibold text-white">{rev.clientName}</span>
-                    <span className="text-xs text-zinc-500 mt-0.5">{rev.roleCompany}</span>
+                    <span className="text-sm font-extrabold text-foreground tracking-tight">
+                      {rev.clientName}
+                    </span>
+                    <span className="text-3xs font-mono font-semibold tracking-wider text-muted-foreground uppercase mt-0.5">
+                      {rev.roleCompany}
+                    </span>
                   </div>
                 </div>
               </div>

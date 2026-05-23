@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Target, Heart, Star, Layout, RefreshCw, HelpCircle } from 'lucide-react';
+import { Target, Heart, Star, Layout, RefreshCw } from 'lucide-react';
 import { pb } from '@/lib/pocketbase';
 
 interface ServiceRecord {
@@ -13,7 +13,7 @@ interface ServiceRecord {
   order: number;
 }
 
-const iconMap: Record<string, React.ComponentType<any>> = {
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Target,
   Heart,
   Star,
@@ -35,7 +35,6 @@ const FALLBACK_WEB = [
 export default function Services() {
   const [hoveredSub, setHoveredSub] = useState<string | null>(null);
   const [dbServices, setDbServices] = useState<ServiceRecord[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchServices() {
@@ -46,8 +45,6 @@ export default function Services() {
         setDbServices(records);
       } catch (err) {
         console.warn('PocketBase Services fetch failed, using fallback:', err);
-      } finally {
-        setLoading(false);
       }
     }
     fetchServices();

@@ -25,7 +25,6 @@ const FALLBACK_HERO: HeroData = {
 
 export default function Hero() {
   const [heroData, setHeroData] = useState<HeroData | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchHero() {
@@ -34,8 +33,6 @@ export default function Hero() {
         setHeroData(record);
       } catch (err) {
         console.warn('PocketBase Hero fetch failed, using fallback:', err);
-      } finally {
-        setLoading(false);
       }
     }
     fetchHero();

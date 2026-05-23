@@ -20,10 +20,10 @@ export default function ContactForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const budgetTiers = [
-    { value: 0, label: '₹50,000 - ₹1,50,000', detail: 'Starter Tier' },
-    { value: 1, label: '₹1,50,000 - ₹5,00,000', detail: 'Growth Tier' },
-    { value: 2, label: '₹5,00,000 - ₹15,00,000', detail: 'Professional Tier' },
-    { value: 3, label: '₹15,00,000+', detail: 'Enterprise Tier' }
+    { value: 0, label: '₹10,000 - ₹50,000', detail: 'Starter Tier' },
+    { value: 1, label: '₹50,000 - ₹2,00,000', detail: 'Growth Tier' },
+    { value: 2, label: '₹2,00,000 - ₹5,00,000', detail: 'Professional Tier' },
+    { value: 3, label: '₹5,00,000+', detail: 'Enterprise Tier' }
   ];
 
   const timelineLabels = {
@@ -252,8 +252,8 @@ export default function ContactForm() {
               className="w-full accent-primary h-1.5 bg-muted rounded-lg appearance-none cursor-pointer"
             />
             <div className="flex justify-between font-mono text-[9px] text-muted-foreground/60 mt-1.5 px-1 uppercase tracking-wider">
-              <span>min (₹50,000)</span>
-              <span>max (₹15,00,000+)</span>
+              <span>min (₹10,000)</span>
+              <span>max (₹5,00,000+)</span>
             </div>
           </div>
         </div>

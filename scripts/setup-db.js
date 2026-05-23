@@ -221,6 +221,54 @@ async function run() {
         { name: 'email', type: 'email', required: true },
         { name: 'message', type: 'text', required: true }
       ]
+    },
+    {
+      name: 'hero',
+      type: 'base',
+      listRule: '',
+      viewRule: '',
+      createRule: null,
+      updateRule: null,
+      deleteRule: null,
+      schema: [
+        { name: 'badge', type: 'text', required: true },
+        { name: 'title1', type: 'text', required: true },
+        { name: 'title2', type: 'text', required: true },
+        { name: 'description', type: 'text', required: true },
+        { name: 'ctaText1', type: 'text' },
+        { name: 'ctaText2', type: 'text' }
+      ],
+      fields: [
+        { name: 'badge', type: 'text', required: true },
+        { name: 'title1', type: 'text', required: true },
+        { name: 'title2', type: 'text', required: true },
+        { name: 'description', type: 'text', required: true },
+        { name: 'ctaText1', type: 'text' },
+        { name: 'ctaText2', type: 'text' }
+      ]
+    },
+    {
+      name: 'services',
+      type: 'base',
+      listRule: '',
+      viewRule: '',
+      createRule: null,
+      updateRule: null,
+      deleteRule: null,
+      schema: [
+        { name: 'title', type: 'text', required: true },
+        { name: 'description', type: 'text', required: true },
+        { name: 'category', type: 'text', required: true },
+        { name: 'icon', type: 'text', required: true },
+        { name: 'order', type: 'number', required: true }
+      ],
+      fields: [
+        { name: 'title', type: 'text', required: true },
+        { name: 'description', type: 'text', required: true },
+        { name: 'category', type: 'text', required: true },
+        { name: 'icon', type: 'text', required: true },
+        { name: 'order', type: 'number', required: true }
+      ]
     }
   ];
 
@@ -250,6 +298,62 @@ async function run() {
       console.error(`\x1b[31m✖ Failed to create "${collection.name}"!\x1b[0m`);
       console.error('Response:', JSON.stringify(createRes.body));
     }
+  }
+
+  // Seeding initial/default values
+  console.log(`\nSeeding default content...`);
+  
+  // 1. Seed Hero
+  try {
+    const checkHero = await makeRequest(`${PB_URL}/api/collections/hero/records`, 'GET', authHeader);
+    if (checkHero.statusCode === 200 && checkHero.body && checkHero.body.items && checkHero.body.items.length === 0) {
+      console.log('Hero collection is empty. Seeding default copy...');
+      const seedHeroRes = await makeRequest(`${PB_URL}/api/collections/hero/records`, 'POST', authHeader, {
+        badge: '✦ now scaling digital platforms',
+        title1: 'we help brands turn',
+        title2: 'digital chaos into clarity',
+        description: 'upscalemark is a digital consultancy engineered for high-performance execution. We design and build bleeding-edge web platforms and coordinate high-impact digital campaigns to elevate your market position.',
+        ctaText1: 'Start Project',
+        ctaText2: 'Our Work'
+      });
+      if (seedHeroRes.statusCode === 200 || seedHeroRes.statusCode === 201) {
+        console.log('\x1b[32m✔ Default Hero copy seeded successfully!\x1b[0m');
+      } else {
+        console.error('✖ Failed to seed Hero copy:', JSON.stringify(seedHeroRes.body));
+      }
+    } else {
+      console.log('ℹ Hero copy already exists. Skipping seed.');
+    }
+  } catch (e) {
+    console.error('Error checking/seeding Hero copy:', e);
+  }
+
+  // 2. Seed Services
+  try {
+    const checkServices = await makeRequest(`${PB_URL}/api/collections/services/records`, 'GET', authHeader);
+    if (checkServices.statusCode === 200 && checkServices.body && checkServices.body.items && checkServices.body.items.length === 0) {
+      console.log('Services collection is empty. Seeding default services...');
+      const defaultServices = [
+        { title: 'Paid Ads', description: 'Performance-driven campaign setups on Search and Social platforms with technical optimization and maximum conversion output.', category: 'marketing', icon: 'Target', order: 1 },
+        { title: 'Social Media Management', description: 'Brand-focused content creation, curation, community nurturing, and scheduled publishing for organic reach.', category: 'marketing', icon: 'Heart', order: 2 },
+        { title: 'Influencer Marketing', description: 'Sourcing, matching, and executing strategic content partnerships with creators to boost brand awareness.', category: 'marketing', icon: 'Star', order: 3 },
+        { title: 'New Websites', description: 'Blisteringly fast, responsive, and SEO-optimized digital stores and corporate products built with Next.js.', category: 'web', icon: 'Layout', order: 4 },
+        { title: 'Old to New Revamping', description: 'Re-engineering legacy legacy systems into highly polished, lightweight, and modern digital destinations.', category: 'web', icon: 'RefreshCw', order: 5 }
+      ];
+      
+      for (const s of defaultServices) {
+        const seedServiceRes = await makeRequest(`${PB_URL}/api/collections/services/records`, 'POST', authHeader, s);
+        if (seedServiceRes.statusCode === 200 || seedServiceRes.statusCode === 201) {
+          console.log(`\x1b[32m✔ Seeded service: "${s.title}"\x1b[0m`);
+        } else {
+          console.error(`✖ Failed to seed service "${s.title}":`, JSON.stringify(seedServiceRes.body));
+        }
+      }
+    } else {
+      console.log('ℹ Services listings already exist. Skipping seed.');
+    }
+  } catch (e) {
+    console.error('Error checking/seeding Services:', e);
   }
 
   console.log(`\n\x1b[32m✔ Database setup complete! You are ready to go!\x1b[0m\n`);

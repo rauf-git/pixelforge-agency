@@ -1,9 +1,48 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { pb } from '@/lib/pocketbase';
+
+interface HeroData {
+  badge: string;
+  title1: string;
+  title2: string;
+  description: string;
+  ctaText1?: string;
+  ctaText2?: string;
+}
+
+const FALLBACK_HERO: HeroData = {
+  badge: '✦ now scaling digital platforms',
+  title1: 'we help brands turn',
+  title2: 'digital chaos into clarity',
+  description: 'upscalemark is a digital consultancy engineered for high-performance execution. We design and build bleeding-edge web platforms and coordinate high-impact digital campaigns to elevate your market position.',
+  ctaText1: 'Start Project',
+  ctaText2: 'Our Work'
+};
 
 export default function Hero() {
+  const [heroData, setHeroData] = useState<HeroData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchHero() {
+      try {
+        const record = await pb.collection('hero').getFirstListItem<HeroData>('');
+        setHeroData(record);
+      } catch (err) {
+        console.warn('PocketBase Hero fetch failed, using fallback:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchHero();
+  }, []);
+
+  const activeHero = heroData || FALLBACK_HERO;
+
   return (
     <section
       id="top"
@@ -16,13 +55,13 @@ export default function Hero() {
         {/* Floating Mini Badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-3xs font-mono font-bold tracking-widest uppercase transition-all duration-300 hover:border-primary/40 hover:bg-primary/10">
           <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
-          ✦ now scaling digital platforms
+          {activeHero.badge}
         </div>
 
         {/* Editorial Bold Lowercase Slogans */}
         <h1 className="text-3.5xl sm:text-6xl md:text-7.5xl font-black tracking-tighter leading-[1] sm:leading-[0.9] text-foreground lowercase">
-          we help brands turn <br />
-          <span className="text-primary">digital chaos into clarity</span> <br />
+          {activeHero.title1} <br />
+          <span className="text-primary">{activeHero.title2}</span> <br />
           <span className="text-muted-foreground/60 font-light">
             {"// systems that scale & marketing that converts."}
           </span>
@@ -30,7 +69,7 @@ export default function Hero() {
 
         {/* Brand Pitch Paragraph */}
         <p className="mt-2 text-muted-foreground text-sm sm:text-base max-w-xl leading-relaxed">
-          upscalemark is a digital consultancy engineered for high-performance execution. We design and build bleeding-edge web platforms and coordinate high-impact digital campaigns to elevate your market position.
+          {activeHero.description}
         </p>
 
         {/* Modern Call to Actions */}
@@ -39,14 +78,14 @@ export default function Hero() {
             href="/contact"
             className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-primary hover:bg-primary/95 text-primary-foreground font-semibold text-xs tracking-wider uppercase transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-primary/10"
           >
-            Start Project
+            {activeHero.ctaText1 || 'Start Project'}
             <ArrowRight className="w-3.5 h-3.5 transition-transform duration-350 group-hover:translate-x-1" />
           </Link>
           <Link
             href="/portfolio"
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-border bg-card/40 hover:bg-muted text-foreground font-semibold text-xs tracking-wider uppercase transition-all duration-300 hover:border-border"
           >
-            Our Work
+            {activeHero.ctaText2 || 'Our Work'}
           </Link>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import FloatingCTA from "@/components/FloatingCTA";
 
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-sans",
@@ -26,6 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${plusJakarta.variable} ${jetbrainsMono.variable} antialiased`}>
         {children}
+        <FloatingCTA />
       </body>
     </html>
   );

@@ -89,6 +89,8 @@
   }
   html {
     @apply scroll-smooth font-sans;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
 }
 
@@ -140,4 +142,21 @@
 }
 ::-webkit-scrollbar-thumb {
   @apply bg-muted-foreground/30 rounded-full hover:bg-primary/60 transition-colors;
+}
+
+/* GPU HARDWARE ACCELERATION FOR LAG ELIMINATION */
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.will-change-transform {
+  will-change: transform;
+}
+
+/* BUTTERY SMOOTH CUBIC-BEZIER TIMING FUNCTIONS */
+.transition-smooth {
+  transition-property: transform, opacity, background-color, border-color;
+  transition-duration: 500ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }

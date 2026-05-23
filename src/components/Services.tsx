@@ -1,21 +1,66 @@
 'use client';
 
-import { useState } from 'react';
-import { Target, Heart, Star, Layout, RefreshCw } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Target, Heart, Star, Layout, RefreshCw, HelpCircle } from 'lucide-react';
+import { pb } from '@/lib/pocketbase';
+
+interface ServiceRecord {
+  id: string;
+  title: string;
+  description: string;
+  category: string; // 'web' or 'marketing'
+  icon: string; // e.g. 'Target', 'Heart', 'Star', 'Layout', 'RefreshCw'
+  order: number;
+}
+
+const iconMap: Record<string, React.ComponentType<any>> = {
+  Target,
+  Heart,
+  Star,
+  Layout,
+  RefreshCw
+};
+
+const FALLBACK_MARKETING = [
+  { id: 'dm-1', title: 'Paid Ads', description: 'Performance-driven campaign setups on Search and Social platforms with technical optimization and maximum conversion output.', icon: 'Target' },
+  { id: 'dm-2', title: 'Social Media Management', description: 'Brand-focused content creation, curation, community nurturing, and scheduled publishing for organic reach.', icon: 'Heart' },
+  { id: 'dm-3', title: 'Influencer Marketing', description: 'Sourcing, matching, and executing strategic content partnerships with creators to boost brand awareness.', icon: 'Star' }
+];
+
+const FALLBACK_WEB = [
+  { id: 'wd-1', title: 'New Websites', description: 'Blisteringly fast, responsive, and SEO-optimized digital stores and corporate products built with Next.js.', icon: 'Layout' },
+  { id: 'wd-2', title: 'Old to New Revamping', description: 'Re-engineering legacy legacy systems into highly polished, lightweight, and modern digital destinations.', icon: 'RefreshCw' }
+];
 
 export default function Services() {
   const [hoveredSub, setHoveredSub] = useState<string | null>(null);
+  const [dbServices, setDbServices] = useState<ServiceRecord[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const digitalMarketingSubs = [
-    { id: 'dm-1', title: 'Paid Ads', desc: 'Performance-driven campaign setups on Search and Social platforms with technical optimization and maximum conversion output.', icon: Target },
-    { id: 'dm-2', title: 'Social Media Management', desc: 'Brand-focused content creation, curation, community nurturing, and scheduled publishing for organic reach.', icon: Heart },
-    { id: 'dm-3', title: 'Influencer Marketing', desc: 'Sourcing, matching, and executing strategic content partnerships with creators to boost brand awareness.', icon: Star }
-  ];
+  useEffect(() => {
+    async function fetchServices() {
+      try {
+        const records = await pb.collection('services').getFullList<ServiceRecord>({
+          sort: 'order',
+        });
+        setDbServices(records);
+      } catch (err) {
+        console.warn('PocketBase Services fetch failed, using fallback:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchServices();
+  }, []);
 
-  const webDevSubs = [
-    { id: 'wd-1', title: 'New Websites', desc: 'Blisteringly fast, responsive, and SEO-optimized digital stores and corporate products built with Next.js.', icon: Layout },
-    { id: 'wd-2', title: 'Old to New Revamping', desc: 'Re-engineering legacy legacy systems into highly polished, lightweight, and modern digital destinations.', icon: RefreshCw }
-  ];
+  // Split fetched items or fallbacks
+  const digitalMarketingSubs = dbServices.length > 0
+    ? dbServices.filter(s => s.category === 'marketing')
+    : FALLBACK_MARKETING;
+
+  const webDevSubs = dbServices.length > 0
+    ? dbServices.filter(s => s.category === 'web')
+    : FALLBACK_WEB;
 
   return (
     <section id="services" className="py-24 px-6 max-w-6xl mx-auto border-t border-border">
@@ -69,7 +114,7 @@ export default function Services() {
             {/* Micro-animated bullet list */}
             <div className="flex flex-col gap-4 mt-4">
               {digitalMarketingSubs.map((sub, index) => {
-                const Icon = sub.icon;
+                const Icon = iconMap[sub.icon] || Target;
                 const isHovered = hoveredSub === sub.id;
                 const isAnyHovered = hoveredSub !== null;
                 return (
@@ -96,7 +141,7 @@ export default function Services() {
                         {sub.title}
                       </h4>
                       <p className="text-xs text-muted-foreground leading-relaxed">
-                        {sub.desc}
+                        {sub.description}
                       </p>
                     </div>
                   </div>
@@ -141,7 +186,7 @@ export default function Services() {
             {/* Micro-animated bullet list */}
             <div className="flex flex-col gap-4 mt-4">
               {webDevSubs.map((sub, index) => {
-                const Icon = sub.icon;
+                const Icon = iconMap[sub.icon] || Layout;
                 const isHovered = hoveredSub === sub.id;
                 const isAnyHovered = hoveredSub !== null;
                 return (
@@ -168,7 +213,7 @@ export default function Services() {
                         {sub.title}
                       </h4>
                       <p className="text-xs text-muted-foreground leading-relaxed">
-                        {sub.desc}
+                        {sub.description}
                       </p>
                     </div>
                   </div>

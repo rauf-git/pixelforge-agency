@@ -99,7 +99,7 @@ export default function AdminDashboard() {
     return (
       <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center justify-center font-sans">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-500 mb-4"></div>
-        <p className="text-xs text-zinc-400">Loading PixelForge Dashboard...</p>
+        <p className="text-xs text-zinc-400">Loading Upscalemark Dashboard...</p>
       </div>
     );
   }
@@ -112,7 +112,7 @@ export default function AdminDashboard() {
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-6">
             <Link href="/" className="text-lg font-black tracking-tight text-white hover:text-violet-400 transition-colors">
-              PixelForge<span className="text-violet-500 font-normal">.Admin</span>
+              Upscalemark<span className="text-violet-500 font-normal">.Admin</span>
             </Link>
             <span className="h-4 w-px bg-zinc-800" />
             <Link href="/admin/add-project" className="text-xs font-semibold text-violet-400 hover:text-violet-300 transition-colors bg-violet-600/10 px-3 py-1.5 rounded-lg border border-violet-500/25">

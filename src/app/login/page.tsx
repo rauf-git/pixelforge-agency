@@ -61,7 +61,7 @@ export default function LoginPage() {
           <Link href="/" className="text-2xs font-mono text-violet-400 hover:text-violet-300 transition-colors uppercase tracking-widest">
             &larr; Back to Agency
           </Link>
-          <h1 className="text-3xl font-extrabold text-white mt-4 tracking-tight">PixelForge Admin</h1>
+          <h1 className="text-3xl font-extrabold text-white mt-4 tracking-tight">Upscalemark Admin</h1>
           <p className="text-xs text-zinc-400 mt-2">Log in to manage your digital agency portfolio</p>
         </div>
 
@@ -76,7 +76,7 @@ export default function LoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@pixelforge.agency"
+              placeholder="admin@upscalemark.com"
               className="w-full bg-zinc-900 border border-zinc-850 focus:border-violet-600 rounded-lg px-4 py-3 text-sm text-white focus:outline-none transition-all placeholder:text-zinc-650"
             />
           </div>

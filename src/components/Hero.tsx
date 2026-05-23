@@ -6,7 +6,7 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative min-h-[90vh] flex flex-col justify-center items-center py-32 px-6 max-w-5xl mx-auto text-center overflow-hidden"
+      className="relative min-h-[85vh] sm:min-h-[90vh] flex flex-col justify-center items-center py-20 sm:py-32 px-4 sm:px-6 max-w-5xl mx-auto text-center overflow-hidden"
     >
       {/* Decorative technical grid overlay in background */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03] dark:opacity-[0.02] bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:40px_40px]"></div>
@@ -19,7 +19,7 @@ export default function Hero() {
         </div>
 
         {/* Editorial Bold Lowercase Slogans */}
-        <h1 className="text-4xl sm:text-6xl md:text-7.5xl font-black tracking-tighter leading-[0.9] text-foreground lowercase">
+        <h1 className="text-3.5xl sm:text-6xl md:text-7.5xl font-black tracking-tighter leading-[1] sm:leading-[0.9] text-foreground lowercase">
           we help brands turn <br />
           <span className="text-primary">digital chaos into clarity</span> <br />
           <span className="text-muted-foreground/60 font-light">
@@ -35,14 +35,14 @@ export default function Hero() {
         {/* Modern Call to Actions */}
         <div className="mt-6 flex flex-col sm:flex-row gap-4 items-center justify-center">
           <a
-            href="#contact"
+            href="/contact"
             className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-primary hover:bg-primary/95 text-primary-foreground font-semibold text-xs tracking-wider uppercase transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-primary/10"
           >
             Start Project
             <ArrowRight className="w-3.5 h-3.5 transition-transform duration-350 group-hover:translate-x-1" />
           </a>
           <a
-            href="#portfolio"
+            href="/portfolio"
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-border bg-card/40 hover:bg-muted text-foreground font-semibold text-xs tracking-wider uppercase transition-all duration-300 hover:border-border"
           >
             Our Work

@@ -23,13 +23,13 @@ export default function About() {
           </p>
           
           {/* Large zero-padded metric cards */}
-          <div className="grid grid-cols-3 gap-6 border-t border-border/60 pt-8 mt-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 border-t border-border/60 pt-8 mt-4 text-center sm:text-left">
             {stats.map((stat, index) => (
-              <div key={index} className="flex flex-col gap-1">
+              <div key={index} className="flex flex-col gap-1 items-center sm:items-start">
                 <span className="text-3xl sm:text-4xl font-black tracking-tight text-primary">
                   {stat.value}
                 </span>
-                <span className="text-3xs font-mono font-semibold tracking-wider text-muted-foreground uppercase">
+                <span className="text-[9px] sm:text-3xs font-mono font-semibold tracking-wider text-muted-foreground uppercase">
                   {stat.label}
                 </span>
               </div>
@@ -38,7 +38,7 @@ export default function About() {
         </div>
 
         {/* Blueprint-style Diagram Column */}
-        <div className="relative aspect-[16/10] bg-muted/65 rounded-[2rem] border border-border overflow-hidden flex flex-col justify-between p-8 group">
+        <div className="relative aspect-auto py-10 px-6 sm:aspect-[16/10] bg-muted/65 rounded-[2rem] border border-border overflow-hidden flex flex-col justify-between sm:p-8 group">
           {/* Decorative grid outline */}
           <div className="absolute inset-0 z-0 opacity-15 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:24px_24px]"></div>
 

@@ -37,7 +37,7 @@ export default function Navbar() {
       <header className="w-full fixed top-6 left-0 right-0 z-50 px-4 flex justify-center pointer-events-none">
         <nav className="w-full max-w-4xl bg-card/60 dark:bg-card/40 backdrop-blur-md border border-border/80 rounded-full py-3.5 px-6 flex justify-between items-center shadow-lg pointer-events-auto transition-transform duration-500 hover:scale-[1.01]">
           {/* Logo & Brand */}
-          <a href="#top" className="flex items-center gap-2.5 group">
+          <a href="/" className="flex items-center gap-2.5 group">
             {/* Inline SVG Woven Hashtag Symbol */}
             <div className="w-8 h-8 relative flex items-center justify-center transition-transform duration-500 group-hover:rotate-12">
               <svg viewBox="0 0 100 100" className="w-full h-full text-primary fill-current">
@@ -59,6 +59,20 @@ export default function Navbar() {
             </span>
           </a>
 
+          {/* Desktop Navigation Links */}
+          <div className="hidden md:flex items-center gap-6">
+            {['services', 'portfolio', 'about', 'contact'].map((item) => (
+              <a
+                key={item}
+                href={`/${item}`}
+                className="font-mono text-3xs font-black tracking-widest uppercase text-muted-foreground hover:text-primary transition-colors duration-300 relative group/nav cursor-pointer py-1"
+              >
+                /{item}
+                <span className="absolute bottom-0 left-0 w-full h-[1px] bg-primary scale-x-0 group-hover/nav:scale-x-100 transition-transform duration-300 origin-left"></span>
+              </a>
+            ))}
+          </div>
+
           {/* Action Row: Theme Toggle + Burger */}
           <div className="flex items-center gap-4">
             {/* Dynamic Sun/Moon Toggle Button */}
@@ -79,7 +93,7 @@ export default function Navbar() {
             {/* Minimalist Burger Menu Button */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="flex flex-col gap-1.5 justify-center items-center w-8 h-8 rounded-full border border-border bg-background hover:bg-muted cursor-pointer group"
+              className="md:hidden flex flex-col gap-1.5 justify-center items-center w-8 h-8 rounded-full border border-border bg-background hover:bg-muted cursor-pointer group"
               aria-label={menuOpen ? "Close Menu" : "Open Menu"}
             >
               <span
@@ -108,7 +122,7 @@ export default function Navbar() {
             {['services', 'portfolio', 'about', 'contact'].map((item, index) => (
               <li key={item} className="overflow-hidden">
                 <a
-                  href={`#${item}`}
+                  href={`/${item}`}
                   onClick={() => setMenuOpen(false)}
                   className={`block text-4xl md:text-6xl font-black tracking-tighter text-foreground hover:text-primary lowercase transition-all duration-500 ease-out transform ${
                     menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
@@ -138,7 +152,7 @@ export default function Navbar() {
             </div>
 
             <a
-              href="#contact"
+              href="/contact"
               onClick={() => setMenuOpen(false)}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs tracking-wider uppercase transition-all shadow-md hover:shadow-lg"
             >

@@ -84,7 +84,7 @@ export default function AddProjectPage() {
           <Link href="/admin" className="text-xs font-mono text-zinc-500 hover:text-white transition-colors uppercase tracking-widest">
             &larr; Cancel & Go Back
           </Link>
-          <span className="text-3xs font-mono text-violet-500 uppercase tracking-widest">PixelForge Workspace</span>
+          <span className="text-3xs font-mono text-violet-500 uppercase tracking-widest">Upscalemark Workspace</span>
         </div>
 
         <form onSubmit={handleSubmit} className="p-8 rounded-2xl border border-zinc-900 bg-zinc-950 shadow-2xl flex flex-col gap-6">

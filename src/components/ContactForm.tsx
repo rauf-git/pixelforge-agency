@@ -20,10 +20,10 @@ export default function ContactForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const budgetTiers = [
-    { value: 0, label: '$1,000 - $3,000', detail: 'Entry Tier' },
-    { value: 1, label: '$3,000 - $10,000', detail: 'Growth Tier' },
-    { value: 2, label: '$10,000 - $25,000', detail: 'Professional Tier' },
-    { value: 3, label: '$25,000+', detail: 'Enterprise Tier' }
+    { value: 0, label: '₹50,000 - ₹1,50,000', detail: 'Starter Tier' },
+    { value: 1, label: '₹1,50,000 - ₹5,00,000', detail: 'Growth Tier' },
+    { value: 2, label: '₹5,00,000 - ₹15,00,000', detail: 'Professional Tier' },
+    { value: 3, label: '₹15,00,000+', detail: 'Enterprise Tier' }
   ];
 
   const timelineLabels = {
@@ -90,7 +90,7 @@ export default function ContactForm() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="p-8 sm:p-12 rounded-[2rem] border border-border bg-card shadow-sm flex flex-col gap-10">
+      <form onSubmit={handleSubmit} className="p-8 sm:p-12 rounded-[2rem] border border-primary/20 bg-zinc-50/90 dark:bg-zinc-900/60 shadow-[0_24px_60px_rgba(80,79,237,0.08)] flex flex-col gap-10">
         
         {/* STEP 1: SERVICE TYPE SEGMENTED TOGGLE */}
         <div className="flex flex-col gap-4">
@@ -251,11 +251,9 @@ export default function ContactForm() {
               onChange={(e) => setBudget(Number(e.target.value))}
               className="w-full accent-primary h-1.5 bg-muted rounded-lg appearance-none cursor-pointer"
             />
-            <div className="flex justify-between font-mono text-4xs text-muted-foreground mt-2 px-1">
-              <span>{budgetTiers[0].label}</span>
-              <span>{budgetTiers[1].label}</span>
-              <span>{budgetTiers[2].label}</span>
-              <span>{budgetTiers[3].label}</span>
+            <div className="flex justify-between font-mono text-[9px] text-muted-foreground/60 mt-1.5 px-1 uppercase tracking-wider">
+              <span>min (₹50,000)</span>
+              <span>max (₹15,00,000+)</span>
             </div>
           </div>
         </div>
